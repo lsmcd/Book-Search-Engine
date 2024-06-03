@@ -1,21 +1,24 @@
 const typeDefs = `#graphql
   type Book {
+    id: ID
     authors: [String]
-    description: String,
-    bookId: String,
+    description: String!,
+    bookId: String!,
     image: String,
     link: String,
-    title: String,
+    title: String!,
   },
   type User {
-    username: String,
-    email: String,
-    password: String, 
+    id: ID
+    username: String!,
+    email: String!,
+    password: String!, 
     savedBooks: [Book],
-  }
+  },
   type Query {
-    users: [User]
-  }
+    users: [User],
+    getSingleUser (userID: ID!): User
+  },
 `
 
 module.exports = typeDefs;
