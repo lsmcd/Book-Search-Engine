@@ -6,7 +6,7 @@ const resolvers = {
     Query: {
   
       users: async () => await User.find({}),
-      getSingleUser: async (_, { userID }) => await User.findById(userID)
+      me: async (_, { userID }) => await User.findById(userID)
   
     },
     

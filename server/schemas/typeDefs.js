@@ -21,7 +21,7 @@ const typeDefs = `#graphql
   },
   type Query {
     users: [User],
-    getSingleUser (userID: ID!): User
+    me (userID: ID!): User
   },
   type Mutation {
     createUser(username: String!, email: String!, password: String!): Auth
