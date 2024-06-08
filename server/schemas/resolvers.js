@@ -12,7 +12,7 @@ const resolvers = {
     
     Mutation: {
 
-      createUser: async (_, { username, email, password}) => {
+      addUser: async (_, { username, email, password}) => {
         const user = await User.create({username, email, password})
         if (user) {
           const token = signToken(user);
@@ -22,7 +22,7 @@ const resolvers = {
         }
       },
 
-      login: async(_, {email, password}) => {
+      loginUser: async(_, {email, password}) => {
         const user = await User.findOne({email: email})
         console.log(user, password)
         if (await user.isCorrectPassword(password)) {
