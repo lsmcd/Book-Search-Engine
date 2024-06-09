@@ -1,12 +1,14 @@
 const { User } = require("../models");
+const { link } = require("../routes");
 const { signToken, AuthenticationError } = require("../utils/auth");
+const jwt = require('jsonwebtoken');
 
 const resolvers = {
 
     Query: {
   
       users: async () => await User.find({}),
-      me: async (_, { userID }) => await User.findById(userID)
+      me: async (_, {}, context) => await User.findById(context.user._id)
   
     },
     
@@ -31,8 +33,29 @@ const resolvers = {
         } else {
           return AuthenticationError;
         }
-      }
+      },
 
+      saveBook: async (_, { userId, ...book}, context) => {
+        if (context.user) {
+          const user = await User.findById(context.user._id);
+          user.savedBooks.push(book);
+          user.save();
+          return user;
+        }
+        throw AuthenticationError;
+      },
+      
+      removeBook: async (_, { bookId }, context) => {
+        if (context.user) {
+          const updatedUser = await User.findOneAndUpdate(
+            { _id: context.user._id },
+            { $pull: { savedBooks: { bookId: bookId } } },
+            { new: true }
+          );
+          return updatedUser;
+        }
+        throw AuthenticationError;
+      }
     }
   
 };
